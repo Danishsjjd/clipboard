@@ -14,10 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { errorToast, toast } from "@/components/ui/use-toast"
+import { errorToast } from "@/components/ui/use-toast"
 import { loginAPI } from "@/services/auth"
 import { useMutation } from "@tanstack/react-query"
-import { isAxiosError } from "axios"
 
 const FormSchema = z.object({
   username: z.string().min(5, {
@@ -53,7 +52,7 @@ const AuthPage = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-2/3 space-y-6"
+          className="max-w-sm w-full mx-auto space-y-6"
         >
           <FormField
             control={form.control}

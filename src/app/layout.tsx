@@ -19,6 +19,8 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const { username } = await isLogin()
+  console.log(process.env)
+  console.log("CRON_SECRET:", process.env.CRON_SECRET)
 
   return (
     <html lang="en">
