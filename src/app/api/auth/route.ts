@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
-import argon2 from "argon2"
+// import argon2 from "argon2"
 
 export async function POST(req: NextRequest) {
   const { username, password } = await req.json()
@@ -25,7 +25,8 @@ export async function POST(req: NextRequest) {
 
   const sessionCookie = {
     name: "session",
-    value: await argon2.hash(username),
+    // value: await argon2.hash(username),
+    value: username,
     maxAge: expiresIn,
     httpOnly: true,
     secure: true,
