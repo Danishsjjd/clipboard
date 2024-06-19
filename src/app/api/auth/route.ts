@@ -8,10 +8,10 @@ export async function POST(req: NextRequest) {
   if (
     typeof username !== "string" ||
     typeof password !== "string" ||
-    (username === "admin" && password !== "MyClipboardApp") ||
+    (username === "admin" && password !== process.env.ADMIN_PASSWORD) ||
     (username !== "admin" && password !== username + " " + "guest")
   )
-    return NextResponse.json({}, { status: 400 })
+    return NextResponse.json("Invalid credentials", { status: 400 })
 
   const expiresIn = 60 * 60 * 24 * 5 * 1000
 
@@ -34,5 +34,5 @@ export async function POST(req: NextRequest) {
   cookies().set(usernameCookie)
   cookies().set(sessionCookie)
 
-  return NextResponse.json({}, { status: 200 })
+  return NextResponse.json({ success: true }, { status: 200 })
 }

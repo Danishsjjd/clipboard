@@ -17,5 +17,5 @@ export async function POST() {
 
   cookies().set(session)
   cookies().set(username)
-  return NextResponse.json({}, { status: 200 })
+  return NextResponse.json({ success: true }, { status: 200 })
 }

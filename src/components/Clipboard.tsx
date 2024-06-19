@@ -1,7 +1,6 @@
 "use client"
-import Copy from "react-copy-to-clipboard"
 import { ChevronsUpDown } from "lucide-react"
-
+import { useUploadThing } from "@/app/api/utils/uploadthing"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -16,9 +15,9 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { clipboardAPI } from "@/services/clipboard"
+import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import Header from "./Header"
@@ -31,37 +30,53 @@ import {
   FormMessage,
 } from "./ui/form"
 import { Textarea } from "./ui/textarea"
-import { useMutation } from "@tanstack/react-query"
-import { clipboardAPI } from "@/services/clipboard"
-import { toast } from "./ui/use-toast"
+import { errorToast, toast } from "./ui/use-toast"
+import { Progress } from "@/components/ui/progress"
 
 type TextForm = {
   text: string
 }
 
 const Clipboard = ({
-  files,
+  files: _files,
   text: _text,
 }: {
   files: string[]
   text: string[]
 }) => {
   const [text, setText] = useState(() => _text)
+  const [files, setFiles] = useState(() => _files)
+  const [progress, setProgress] = useState(0)
+
   const clipboard = useMutation({ mutationFn: clipboardAPI })
 
   const textForm = useForm<TextForm>({ defaultValues: { text: "" } })
-
   const onTextSubmit = (data: TextForm) => {
     clipboard.mutate(data, {
       onSuccess(data) {
         setText((pre) => [data, ...pre])
         textForm.reset()
       },
-      onError(error) {
-        toast({ title: error.message })
-      },
+      onError: errorToast,
     })
   }
+
+  const { startUpload, isUploading } = useUploadThing("uploader", {
+    onClientUploadComplete: (res) => {
+      setFiles((pre) => [...res.map((e) => e.url), ...pre])
+      toast({ title: "Upload Completed" })
+    },
+    onBeforeUploadBegin(files) {
+      setProgress(0)
+      return files
+    },
+    onUploadProgress(p) {
+      setProgress(p)
+    },
+    onUploadError(error: Error) {
+      toast({ title: `ERROR! ${error.message}` })
+    },
+  })
 
   return (
     <>
@@ -116,18 +131,18 @@ const Clipboard = ({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="current">Current password</Label>
-                  <Input id="current" type="password" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="new">New password</Label>
-                  <Input id="new" type="password" />
-                </div>
+                {isUploading ? (
+                  <Progress value={progress} />
+                ) : (
+                  <input
+                    type="file"
+                    onChange={async (e) =>
+                      e.target.files && startUpload(Array.from(e.target.files))
+                    }
+                    multiple
+                  />
+                )}
               </CardContent>
-              <CardFooter>
-                <Button>Save</Button>
-              </CardFooter>
               <CollapsibleComponent content={files} type="files" />
             </Card>
           </TabsContent>
@@ -157,7 +172,7 @@ function CollapsibleComponent({
           Previous stored {type} ({content.length}):
         </h4>
         <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="sm" className="w-9 p-0">
+          <Button variant="ghost" size="sm" className="w-9 p-0" type="button">
             <ChevronsUpDown className="h-4 w-4" />
             <span className="sr-only">Toggle</span>
           </Button>
@@ -166,11 +181,24 @@ function CollapsibleComponent({
 
       <CollapsibleContent className="space-y-2">
         {content.map((e, i) => (
-          <Copy text={e} onCopy={() => toast({ title: "copied!" })} key={i}>
-            <div className="rounded-md border px-4 py-3 font-mono text-sm">
-              {e}
-            </div>
-          </Copy>
+          <button
+            type="button"
+            className="rounded-md border px-4 py-3 font-mono text-sm text-left block w-full"
+            key={i}
+            onClick={async () => {
+              if (type === "files")
+                return window.open(e, "_blank", "noopener,noreferrer")
+
+              try {
+                await navigator.clipboard.writeText(e)
+                toast({ title: "copied!" })
+              } catch (e) {
+                toast({ title: "Cannot able to copy text" })
+              }
+            }}
+          >
+            {e}
+          </button>
         ))}
       </CollapsibleContent>
     </Collapsible>

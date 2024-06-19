@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useAuth } from "@/context/useAuth"
 import { logoutAPI } from "@/services/auth"
 import { useMutation } from "@tanstack/react-query"
-import { toast } from "./ui/use-toast"
+import { errorToast, toast } from "./ui/use-toast"
 
 export default function Header() {
   const { username } = useAuth()
@@ -14,11 +14,10 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between bg-background px-4 py-3 shadow-sm sm:px-6">
       <div className="flex items-center gap-2">
-        <Avatar className="h-8 w-8">
-          <AvatarImage src="/placeholder-user.jpg" />
+        <Avatar className="size-10">
           <AvatarFallback>CB</AvatarFallback>
         </Avatar>
-        <div className="text-sm font-medium">{username}</div>
+        <div className="text-sm font-medium capitalize">{username}</div>
       </div>
       <Button
         variant="ghost"
@@ -29,9 +28,7 @@ export default function Header() {
             onSuccess() {
               window.location.reload()
             },
-            onError(error) {
-              toast({ title: error.message })
-            },
+            onError: errorToast,
           })
         }
       >

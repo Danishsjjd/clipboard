@@ -14,9 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { errorToast, toast } from "@/components/ui/use-toast"
 import { loginAPI } from "@/services/auth"
 import { useMutation } from "@tanstack/react-query"
+import { isAxiosError } from "axios"
 
 const FormSchema = z.object({
   username: z.string().min(5, {
@@ -43,9 +44,7 @@ const AuthPage = () => {
       onSuccess() {
         window.location.reload()
       },
-      onError() {
-        toast({ title: "Invalid credentials", variant: "destructive" })
-      },
+      onError: errorToast,
     })
   }
 

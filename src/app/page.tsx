@@ -9,16 +9,16 @@ const Home = async () => {
 
   const filterData = (data: string[]): string[] =>
     username
-      ? username === "admin"
-        ? data
-        : data
-            .filter((e) => e.startsWith(`${username}:`))
-            .map((e) =>
-              e
-                .split(":")
-                .filter((e, i) => i !== 0)
-                .join("")
-            )
+      ? data
+          .filter((e) =>
+            username === "admin" ? true : e.startsWith(`${username}:`)
+          )
+          .map((e) =>
+            e
+              .split(":")
+              .filter((e, i) => i !== 0)
+              .join(":")
+          )
       : []
   let files: string[] = []
   let text: string[] = []
