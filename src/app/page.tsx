@@ -3,6 +3,7 @@ import Clipboard from "@/components/Clipboard"
 import AuthContextProvider from "@/context/useAuth"
 import isLogin from "./api/utils/isLogin"
 import { redis } from "@/lib/redis"
+import parseValue from "./api/utils/parseValue"
 
 const Home = async () => {
   const { username } = await isLogin()
@@ -13,12 +14,7 @@ const Home = async () => {
           .filter((e) =>
             username === "admin" ? true : e.startsWith(`${username}:`)
           )
-          .map((e) =>
-            e
-              .split(":")
-              .filter((e, i) => i !== 0)
-              .join(":")
-          )
+          .map(parseValue)
       : []
   let files: string[] = []
   let text: string[] = []
