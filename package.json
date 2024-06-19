@@ -47,5 +47,20 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "pkg": {
+    "outputPath": ".dist",
+    "targets": [
+      "node14-win-x64",
+      "node14-macos-x64",
+      "node14-linux-x64"
+    ],
+    "assets": [
+      "utils/*",
+      "public/*",
+      "public/**/*",
+      "node_modules/usb/*",
+      "node_modules/usb/**/*"
+    ]
   }
 }
