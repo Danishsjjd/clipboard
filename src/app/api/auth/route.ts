@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
-// import argon2 from "argon2"
+import bcrypt from "bcrypt"
 
 export async function POST(req: NextRequest) {
   const { username, password } = await req.json()
@@ -23,10 +23,10 @@ export async function POST(req: NextRequest) {
     secure: true,
   }
 
+  const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT!))
   const sessionCookie = {
     name: "session",
-    // value: await argon2.hash(username),
-    value: username,
+    value: await bcrypt.hash(username, salt),
     maxAge: expiresIn,
     httpOnly: true,
     secure: true,

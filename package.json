@@ -23,6 +23,7 @@
     "@uploadthing/react": "^6.6.0",
     "@upstash/redis": "^1.31.5",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.395.0",
@@ -38,6 +39,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

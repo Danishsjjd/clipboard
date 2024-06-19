@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-// import argon2 from "argon2"
+import bcrypt from "bcrypt"
 
 export default async function isLogin() {
   const username = cookies().get("username")?.value
@@ -7,8 +7,7 @@ export default async function isLogin() {
   let login = false
 
   try {
-    // login = await argon2.verify(session ?? "", username ?? "")
-    login = false
+    login = await bcrypt.compare(username ?? "", session ?? "")
   } catch (e) {
     login = false
   }
