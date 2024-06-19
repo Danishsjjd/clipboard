@@ -10,15 +10,21 @@ import React, {
 } from "react"
 
 const AuthContext = createContext<null | {
-  isLogin: boolean
-  setIsLogin: Dispatch<SetStateAction<boolean>>
+  username: string
+  setUsername: Dispatch<SetStateAction<string>>
 }>(null)
 
-const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const [isLogin, setIsLogin] = useState(false)
+const AuthContextProvider = ({
+  children,
+  initialValue,
+}: {
+  children: ReactNode
+  initialValue?: { username: string }
+}) => {
+  const [username, setUsername] = useState(initialValue?.username ?? "")
 
   return (
-    <AuthContext.Provider value={{ isLogin, setIsLogin }}>
+    <AuthContext.Provider value={{ username, setUsername }}>
       {children}
     </AuthContext.Provider>
   )

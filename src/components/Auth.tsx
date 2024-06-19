@@ -16,18 +16,21 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { useAuth } from "@/context/useAuth"
+import { useMutation } from "@tanstack/react-query"
+import { loginAPI } from "@/services/auth"
 
 const FormSchema = z.object({
-  username: z.string().min(8, {
-    message: "Username must be at least 8 characters.",
+  username: z.string().min(5, {
+    message: "Username must be at least 5 characters.",
   }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+  password: z.string().min(5, {
+    message: "Password must be at least 5 characters.",
   }),
 })
 
 const AuthPage = () => {
-  const { setIsLogin } = useAuth()
+  const { setUsername } = useAuth()
+  const login = useMutation({ mutationFn: loginAPI })
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -37,11 +40,15 @@ const AuthPage = () => {
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (data.username !== "dev.danish" || data.password !== "RGyTaL9Q")
-      return toast({ title: "Invalid credentials", variant: "destructive" })
-
-    setIsLogin(true)
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    login.mutate(data, {
+      onSuccess() {
+        setUsername(data.username)
+      },
+      onError() {
+        toast({ title: "Invalid credentials", variant: "destructive" })
+      },
+    })
   }
 
   return (
@@ -77,7 +84,9 @@ const AuthPage = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={login.isPending}>
+            Submit
+          </Button>
         </form>
       </Form>
     </main>

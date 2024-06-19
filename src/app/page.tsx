@@ -4,8 +4,8 @@ import AuthPage from "@/components/Auth"
 import { useAuth } from "@/context/useAuth"
 
 const Home = () => {
-  const { isLogin } = useAuth()
-  return isLogin ? <div>Hello!</div> : <AuthPage />
+  const { username } = useAuth()
+  return username ? <div>Hello {username}!</div> : <AuthPage />
 }
 
 export default Home
