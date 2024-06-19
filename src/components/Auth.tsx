@@ -15,9 +15,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
-import { useAuth } from "@/context/useAuth"
-import { useMutation } from "@tanstack/react-query"
 import { loginAPI } from "@/services/auth"
+import { useMutation } from "@tanstack/react-query"
 
 const FormSchema = z.object({
   username: z.string().min(5, {
@@ -29,7 +28,6 @@ const FormSchema = z.object({
 })
 
 const AuthPage = () => {
-  const { setUsername } = useAuth()
   const login = useMutation({ mutationFn: loginAPI })
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -43,7 +41,7 @@ const AuthPage = () => {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     login.mutate(data, {
       onSuccess() {
-        setUsername(data.username)
+        window.location.reload()
       },
       onError() {
         toast({ title: "Invalid credentials", variant: "destructive" })

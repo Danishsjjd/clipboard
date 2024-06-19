@@ -1,12 +1,11 @@
 import { Toaster } from "@/components/ui/toaster"
-import ReactQueryProvider from "@/context/ReactQueryProvider"
+import ReactQueryProvider from "@/components/ReactQueryProvider"
 import AuthContextProvider from "@/context/useAuth"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import isLogin from "./api/utils/isLogin"
 import "./globals.css"
-import { cookies } from "next/headers"
-import argon2 from "argon2"
-
+import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -19,27 +18,24 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const username = cookies().get("username")?.value
-  const session = cookies().get("session")?.value
-  let login = false
-
-  try {
-    login = await argon2.verify(session ?? "", username ?? "")
-  } catch (e) {
-    login = false
-  }
+  const { username } = await isLogin()
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ReactQueryProvider>
-          <AuthContextProvider
-            initialValue={{ username: username && login ? username : "" }}
-          >
-            <main>{children}</main>
-            <Toaster />
-          </AuthContextProvider>
-        </ReactQueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ReactQueryProvider>
+            <AuthContextProvider initialValue={{ username }}>
+              <main>{children}</main>
+              <Toaster />
+            </AuthContextProvider>
+          </ReactQueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,17 +1,15 @@
 "use client"
 
-import React, {
-  type ReactNode,
-  createContext,
-  useContext,
-  useState,
+import {
   Dispatch,
   SetStateAction,
+  createContext,
+  useContext,
+  type ReactNode,
 } from "react"
 
 const AuthContext = createContext<null | {
   username: string
-  setUsername: Dispatch<SetStateAction<string>>
 }>(null)
 
 const AuthContextProvider = ({
@@ -19,14 +17,10 @@ const AuthContextProvider = ({
   initialValue,
 }: {
   children: ReactNode
-  initialValue?: { username: string }
+  initialValue: { username: string }
 }) => {
-  const [username, setUsername] = useState(initialValue?.username ?? "")
-
   return (
-    <AuthContext.Provider value={{ username, setUsername }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={initialValue}>{children}</AuthContext.Provider>
   )
 }
 
