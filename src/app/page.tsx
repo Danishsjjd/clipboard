@@ -1,8 +1,8 @@
-import AuthPage from "@/components/Auth"
+import AuthPage from "@/components/AuthPage"
 import Clipboard from "@/components/Clipboard"
 import AuthContextProvider from "@/context/useAuth"
-import isLogin from "./api/utils/isLogin"
 import { redis } from "@/lib/redis"
+import isLogin from "./api/utils/isLogin"
 import parseValue from "./api/utils/parseValue"
 
 const Home = async () => {
