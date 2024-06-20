@@ -1,13 +1,19 @@
 "use client"
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/context/useAuth"
 import { logoutAPI } from "@/services/auth"
 import { useMutation } from "@tanstack/react-query"
-import { errorToast, toast } from "./ui/use-toast"
+import ms from "ms"
+import { errorToast } from "./ui/use-toast"
 
-export default function Header() {
+const timeAgo = (time: number): string => {
+  if (!time) return "Never"
+  return `${ms(Date.now() - new Date(time).getTime())} ago`
+}
+
+export default function Header({ cronDate }: { cronDate: string | null }) {
   const { username } = useAuth()
   const logout = useMutation({ mutationFn: logoutAPI })
 
@@ -19,22 +25,29 @@ export default function Header() {
         </Avatar>
         <div className="text-sm font-medium capitalize">{username}</div>
       </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        disabled={logout.isPending}
-        onClick={() =>
-          logout.mutate(undefined, {
-            onSuccess() {
-              window.location.reload()
-            },
-            onError: errorToast,
-          })
-        }
-      >
-        <LogOutIcon />
-        <span className="sr-only">Logout</span>
-      </Button>
+      <div className="flex gap-6 items-center">
+        {cronDate && (
+          <p className="text-sm font-medium">
+            Cron: {timeAgo(new Date(cronDate).getTime())}
+          </p>
+        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={logout.isPending}
+          onClick={() =>
+            logout.mutate(undefined, {
+              onSuccess() {
+                window.location.reload()
+              },
+              onError: errorToast,
+            })
+          }
+        >
+          <LogOutIcon />
+          <span className="sr-only">Logout</span>
+        </Button>
+      </div>
     </header>
   )
 }

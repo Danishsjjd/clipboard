@@ -52,7 +52,7 @@ const AuthPage = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="max-w-sm w-full mx-auto space-y-6"
+          className="max-w-sm w-full px-3 mx-auto space-y-6"
         >
           <FormField
             control={form.control}

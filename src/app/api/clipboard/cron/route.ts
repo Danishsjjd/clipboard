@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
 
   await utapi.deleteFiles(files)
   await redis.flushall()
+  await redis.set("cron", Date.now())
 
   return NextResponse.json({ ok: true })
 }

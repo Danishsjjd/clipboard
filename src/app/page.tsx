@@ -18,15 +18,22 @@ const Home = async () => {
       : []
   let files: string[] = []
   let text: string[] = []
+  let cronDate: string | null = null
 
   if (username) {
     files = filterData(await redis.lrange("files", 0, -1))
     text = filterData(await redis.lrange("text", 0, -1))
+
+    if (username === "admin") cronDate = await redis.get("cron")
   }
 
   return (
     <AuthContextProvider initialValue={{ username }}>
-      {username ? <Clipboard files={files} text={text} /> : <AuthPage />}
+      {username ? (
+        <Clipboard cronDate={cronDate} files={files} text={text} />
+      ) : (
+        <AuthPage />
+      )}
     </AuthContextProvider>
   )
 }

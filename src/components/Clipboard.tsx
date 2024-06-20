@@ -1,5 +1,4 @@
 "use client"
-import { ChevronsUpDown } from "lucide-react"
 import { useUploadThing } from "@/app/api/utils/uploadthing"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,9 +14,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { clipboardAPI } from "@/services/clipboard"
 import { useMutation } from "@tanstack/react-query"
+import { ChevronsUpDown } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import Header from "./Header"
@@ -31,7 +32,6 @@ import {
 } from "./ui/form"
 import { Textarea } from "./ui/textarea"
 import { errorToast, toast } from "./ui/use-toast"
-import { Progress } from "@/components/ui/progress"
 
 type TextForm = {
   text: string
@@ -40,9 +40,11 @@ type TextForm = {
 const Clipboard = ({
   files: _files,
   text: _text,
+  cronDate,
 }: {
   files: string[]
   text: string[]
+  cronDate: string | null
 }) => {
   const [text, setText] = useState(() => _text)
   const [files, setFiles] = useState(() => _files)
@@ -80,8 +82,8 @@ const Clipboard = ({
 
   return (
     <>
-      <Header />
-      <div className="max-w-3xl mx-auto p-8">
+      <Header cronDate={cronDate} />
+      <div className="max-w-3xl mx-auto p-3 sm:p-8">
         <Tabs defaultValue="text">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="text">Text</TabsTrigger>
