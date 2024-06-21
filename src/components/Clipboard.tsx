@@ -1,35 +1,22 @@
 "use client"
-import { useUploadThing } from "@/app/api/utils/uploadthing"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { clipboardAPI } from "@/services/clipboard"
+
 import { useMutation } from "@tanstack/react-query"
 import { ChevronsUpDown } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+
+import { clipboardAPI } from "@/services/clipboard"
+
+import { useUploadThing } from "@/app/api/utils/uploadthing"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 import Header from "./Header"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { Textarea } from "./ui/textarea"
 import { errorToast, toast } from "./ui/use-toast"
 
@@ -83,7 +70,7 @@ const Clipboard = ({
   return (
     <>
       <Header cronDate={cronDate} />
-      <div className="max-w-3xl mx-auto p-3 sm:p-8">
+      <div className="mx-auto max-w-3xl p-3 sm:p-8">
         <Tabs defaultValue="text">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="text">Text</TabsTrigger>
@@ -95,9 +82,7 @@ const Clipboard = ({
                 <Card>
                   <CardHeader>
                     <CardTitle>Share text</CardTitle>
-                    <CardDescription>
-                      Click save when you&apos;re done.
-                    </CardDescription>
+                    <CardDescription>Click save when you&apos;re done.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="space-y-1">
@@ -128,9 +113,7 @@ const Clipboard = ({
             <Card>
               <CardHeader>
                 <CardTitle>Share files</CardTitle>
-                <CardDescription>
-                  Click save when you&apos;re done.
-                </CardDescription>
+                <CardDescription>Click save when you&apos;re done.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 {isUploading ? (
@@ -138,9 +121,7 @@ const Clipboard = ({
                 ) : (
                   <input
                     type="file"
-                    onChange={async (e) =>
-                      e.target.files && startUpload(Array.from(e.target.files))
-                    }
+                    onChange={async (e) => e.target.files && startUpload(Array.from(e.target.files))}
                     multiple
                   />
                 )}
@@ -154,21 +135,11 @@ const Clipboard = ({
   )
 }
 
-function CollapsibleComponent({
-  content,
-  type,
-}: {
-  content: string[]
-  type: "text" | "files"
-}) {
+function CollapsibleComponent({ content, type }: { content: string[]; type: "text" | "files" }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Collapsible
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      className="space-y-2 px-6 pb-6"
-    >
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-2 px-6 pb-6">
       <div className="flex items-center justify-between space-x-4 px-4">
         <h4 className="text-sm font-semibold">
           Previous stored {type} ({content.length}):
@@ -185,11 +156,10 @@ function CollapsibleComponent({
         {content.map((e, i) => (
           <button
             type="button"
-            className="rounded-md border px-4 py-3 font-mono text-sm text-left block w-full"
+            className="block w-full rounded-md border px-4 py-3 text-left font-mono text-sm"
             key={i}
             onClick={async () => {
-              if (type === "files")
-                return window.open(e, "_blank", "noopener,noreferrer")
+              if (type === "files") return window.open(e, "_blank", "noopener,noreferrer")
 
               try {
                 await navigator.clipboard.writeText(e)

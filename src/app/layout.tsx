@@ -1,11 +1,16 @@
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+
+import isLogin from "./api/utils/isLogin"
+
 import ReactQueryProvider from "@/components/ReactQueryProvider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
-import AuthContextProvider from "@/context/useAuth"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import isLogin from "./api/utils/isLogin"
+
 import "./globals.css"
+
+import AuthContextProvider from "@/context/useAuth"
+
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -23,12 +28,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <ReactQueryProvider>
             <AuthContextProvider initialValue={{ username }}>
               <main>{children}</main>

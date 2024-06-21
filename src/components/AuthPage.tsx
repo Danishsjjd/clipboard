@@ -1,20 +1,16 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { errorToast } from "@/components/ui/use-toast"
-import { loginAPI } from "@/services/auth"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+
+import { loginAPI } from "@/services/auth"
+
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { errorToast } from "@/components/ui/use-toast"
+
+import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 const FormSchema = z.object({
@@ -47,14 +43,12 @@ const AuthPage = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gradient-to-br from-[#6b46c1] to-[#b794f4]">
-      <div className="w-full max-w-md p-6 bg-background rounded-lg shadow-lg">
+    <div className="flex h-screen items-center justify-center bg-gradient-to-br from-[#6b46c1] to-[#b794f4]">
+      <div className="w-full max-w-md rounded-lg bg-background p-6 shadow-lg">
         <div className="space-y-4">
           <div className="text-center">
             <h1 className="text-3xl font-bold">Welcome Back</h1>
-            <p className="text-muted-foreground">
-              Enter your credentials to access your clipboard.
-            </p>
+            <p className="text-muted-foreground">Enter your credentials to access your clipboard.</p>
           </div>
           <Form {...form}>
             <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -88,11 +82,7 @@ const AuthPage = () => {
                   )}
                 />
               </div>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={login.isPending}
-              >
+              <Button type="submit" className="w-full" disabled={login.isPending}>
                 Login
               </Button>
             </form>

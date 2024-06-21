@@ -1,12 +1,16 @@
 "use client"
 
+import { useMutation } from "@tanstack/react-query"
+
+import { logoutAPI } from "@/services/auth"
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/context/useAuth"
-import { logoutAPI } from "@/services/auth"
-import { useMutation } from "@tanstack/react-query"
-import ms from "ms"
+
 import { errorToast } from "./ui/use-toast"
+
+import { useAuth } from "@/context/useAuth"
+import ms from "ms"
 
 const timeAgo = (time: number): string => {
   if (!time) return "Never"
@@ -25,12 +29,8 @@ export default function Header({ cronDate }: { cronDate: string | null }) {
         </Avatar>
         <div className="text-sm font-medium capitalize">{username}</div>
       </div>
-      <div className="flex gap-6 items-center">
-        {cronDate && (
-          <p className="text-sm font-medium">
-            Cron: {timeAgo(new Date(cronDate).getTime())}
-          </p>
-        )}
+      <div className="flex items-center gap-6">
+        {cronDate && <p className="text-sm font-medium">Cron: {timeAgo(new Date(cronDate).getTime())}</p>}
         <Button
           variant="ghost"
           size="sm"

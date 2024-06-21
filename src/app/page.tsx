@@ -1,21 +1,17 @@
-import AuthPage from "@/components/AuthPage"
-import Clipboard from "@/components/Clipboard"
-import AuthContextProvider from "@/context/useAuth"
-import { redis } from "@/lib/redis"
 import isLogin from "./api/utils/isLogin"
 import parseValue from "./api/utils/parseValue"
+
+import AuthPage from "@/components/AuthPage"
+import Clipboard from "@/components/Clipboard"
+
+import AuthContextProvider from "@/context/useAuth"
+import { redis } from "@/lib/redis"
 
 const Home = async () => {
   const { username } = await isLogin()
 
   const filterData = (data: string[]): string[] =>
-    username
-      ? data
-          .filter((e) =>
-            username === "admin" ? true : e.startsWith(`${username}:`)
-          )
-          .map(parseValue)
-      : []
+    username ? data.filter((e) => (username === "admin" ? true : e.startsWith(`${username}:`))).map(parseValue) : []
   let files: string[] = []
   let text: string[] = []
   let cronDate: string | null = null
@@ -29,11 +25,7 @@ const Home = async () => {
 
   return (
     <AuthContextProvider initialValue={{ username }}>
-      {username ? (
-        <Clipboard cronDate={cronDate} files={files} text={text} />
-      ) : (
-        <AuthPage />
-      )}
+      {username ? <Clipboard cronDate={cronDate} files={files} text={text} /> : <AuthPage />}
     </AuthContextProvider>
   )
 }

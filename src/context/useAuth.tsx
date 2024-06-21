@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  type ReactNode,
-} from "react"
+import { Dispatch, type ReactNode, SetStateAction, createContext, useContext } from "react"
 
 const AuthContext = createContext<null | {
   username: string
@@ -19,17 +13,12 @@ const AuthContextProvider = ({
   children: ReactNode
   initialValue: { username: string }
 }) => {
-  return (
-    <AuthContext.Provider value={initialValue}>{children}</AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={initialValue}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  if (!context)
-    throw new Error(
-      "The useAuth hook must be used inside the <AuthContextProvider> component's context."
-    )
+  if (!context) throw new Error("The useAuth hook must be used inside the <AuthContextProvider> component's context.")
 
   return context
 }
