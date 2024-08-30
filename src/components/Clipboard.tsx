@@ -113,7 +113,7 @@ const Clipboard = ({
             <Card>
               <CardHeader>
                 <CardTitle>Share files</CardTitle>
-                <CardDescription>Click save when you&apos;re done.</CardDescription>
+                <CardDescription>Please select a file to upload.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 {isUploading ? (
